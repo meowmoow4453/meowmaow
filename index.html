@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="th" data-gift-mode="view"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8eee8">
+  <title>เรื่องราวของเรา</title>
+
+  <style>
+    :root {
+      --bg: #f8eee8;
+      --ink: #513e3b;
+      --muted: #89746e;
+      --rose: #ad5c70;
+      --rose-light: #d9909f;
+      --line: #eadbd3;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 15%, #fff9ee 0, transparent 45%),
+        radial-gradient(circle at 85% 85%, #f0dce1 0, transparent 45%),
+        var(--bg);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    button { font: inherit; }
+
+    button:focus-visible {
+      outline: 3px solid var(--rose);
+      outline-offset: 5px;
+    }
+
+    .app { width: min(100%, 680px); }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0 4px 15px;
+    }
+
+    .brand { margin: 0; font-weight: 650; }
+    .tag { color: var(--muted); font-size: 12px; }
+
+    .card {
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid #ffffff;
+      border-radius: 28px;
+      background: #fffaf6;
+      box-shadow: 0 20px 65px #71514913;
+    }
+
+    .progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .progress span {
+      height: 4px;
+      flex: 1;
+      border-radius: 10px;
+      background: var(--line);
+      transition: background .5s;
+    }
+
+    .progress span.active { background: var(--rose-light); }
+
+    /* พื้นที่แอนิเมชัน */
+    .stage {
+      position: relative;
+      height: clamp(270px, 44svh, 350px);
+      overflow: hidden;
+      isolation: isolate;
+      border-radius: 20px;
+      background: linear-gradient(#f5e9df, #fff5e8);
+      transition: background 1s;
+    }
+
+    .sun {
+      position: absolute;
+      top: 25px;
+      left: calc(50% - 34px);
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #ffedca;
+      box-shadow: 0 0 55px 24px #ffedca80;
+      transition: opacity 1s, transform 1s;
+    }
+
+    .divider {
+      position: absolute;
+      top: 24px;
+      bottom: 48px;
+      left: 50%;
+      width: 1px;
+      background: #d8c4b880;
+      transition: opacity 1s;
+    }
+
+    .floor {
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      bottom: -42px;
+      height: 108px;
+      border-radius: 50%;
+      background: #e8d9c9;
+      transition: background 1s;
+    }
+
+    .note {
+      position: absolute;
+      z-index: 4;
+      top: 35px;
+      left: 25%;
+      transform: translateX(-50%);
+      max-width: 44%;
+      padding: 7px 12px;
+      border: 1px solid #ffffff;
+      border-radius: 13px;
+      background: #fffaf2ec;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      transition: left 1s, opacity .5s;
+    }
+
+    .note-b { left: 75%; }
+
+    .between {
+      position: absolute;
+      top: 97px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--rose);
+      font-size: 34px;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    /* ตัวละครแบบเรียบง่าย */
+    .actor {
+      --shirt: #9daba0;
+      --hair: #56413a;
+      position: absolute;
+      z-index: 3;
+      bottom: 44px;
+      left: 25%;
+      width: 84px;
+      transform: translateX(-50%);
+      transition: left 1.25s ease, opacity .6s ease;
+    }
+
+    .actor-b {
+      --shirt: #cc9295;
+      --hair: #6c4c3f;
+      left: 75%;
+    }
+
+    .figure {
+      position: relative;
+      height: 151px;
+      animation: breathe 3.5s ease-in-out infinite;
+    }
+
+    .actor-b .figure { animation-delay: -.9s; }
+
+    .figure::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      bottom: -2px;
+      left: 11px;
+      width: 62px;
+      height: 9px;
+      border-radius: 50%;
+      background: #73584618;
+    }
+
+    .face {
+      position: absolute;
+      z-index: 2;
+      top: 12px;
+      left: 18px;
+      width: 48px;
+      height: 51px;
+      border-radius: 20px 20px 23px 23px;
+      background: #efd0b7;
+    }
+
+    .hair {
+      position: absolute;
+      z-index: 3;
+      top: 3px;
+      left: 15px;
+      width: 54px;
+      height: 29px;
+      border-radius: 25px 25px 10px 7px;
+      background: var(--hair);
+      transform: rotate(-5deg);
+    }
+
+    .actor-b .hair {
+      height: 30px;
+      border-radius: 23px 23px 6px 15px;
+      transform: rotate(5deg);
+    }
+
+    .eye {
+      position: absolute;
+      top: 23px;
+      width: 4px;
+      height: 5px;
+      border-radius: 50%;
+      background: #503d36;
+    }
+
+    .eye.left { left: 13px; }
+    .eye.right { right: 13px; }
+
+    .mouth {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      width: 9px;
+      height: 5px;
+      border-bottom: 2px solid #a16b63;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .torso {
+      position: absolute;
+      top: 64px;
+      left: 12px;
+      width: 60px;
+      height: 51px;
+      border-radius: 17px 17px 7px 7px;
+      background: var(--shirt);
+    }
+
+    .torso::before,
+    .torso::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      width: 13px;
+      height: 39px;
+      border-bottom: 7px solid #efd0b7;
+      border-radius: 10px;
+      background: var(--shirt);
+      transform-origin: top center;
+      transition: transform 1s;
+    }
+
+    .torso::before { left: -7px; transform: rotate(9deg); }
+    .torso::after { right: -7px; transform: rotate(-9deg); }
+
+    .legs {
+      position: absolute;
+      top: 112px;
+      left: 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .legs i {
+      position: relative;
+      width: 12px;
+      height: 29px;
+      border-radius: 0 0 4px 4px;
+      background: #726b69;
+    }
+
+    .legs i::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: -3px;
+      width: 18px;
+      height: 7px;
+      border-radius: 7px 7px 3px 3px;
+      background: #fff8ec;
+    }
+
+    .name {
+      margin-top: 8px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    /* การเปลี่ยนบรรยากาศแต่ละฉาก */
+    .scene-1 { background: linear-gradient(#eadfdc, #fff2e5); }
+    .scene-1 .sun { opacity: .55; transform: translateX(-25px); }
+    .scene-1 .actor-b .mouth { height: 1px; border-radius: 0; }
+
+    /* ฉากที่ 3: พบกันและจับมือ */
+    .scene-2 .divider { opacity: 0; }
+    .scene-2 .actor-a { left: calc(50% - 50px); }
+    .scene-2 .actor-b { left: calc(50% + 50px); }
+    .scene-2 .actor .figure { animation: none; transform: translateY(0); }
+    .scene-2 .actor-a .torso::after { transform: rotate(-32deg); }
+    .scene-2 .actor-b .torso::before { transform: rotate(32deg); }
+    .scene-2 .between { opacity: 1; }
+
+    .scene-3 .divider { opacity: 0; }
+    .scene-3 .actor-a { left: calc(50% - 46px); }
+    .scene-3 .actor-b { left: calc(50% + 46px); }
+    .scene-3 .between { opacity: 1; }
+    .scene-3 .floor { background: #e7d0ba; }
+    .scene-3 .actor-a .torso::after { transform: rotate(-25deg); }
+    .scene-3 .actor-b .torso::before { transform: rotate(25deg); }
+
+    .scene-4 .divider { opacity: 0; }
+    .scene-4 .actor-a { left: calc(50% - 65px); }
+    .scene-4 .actor-b { left: calc(50% + 65px); }
+    .scene-4 .actor-a .torso::after { transform: rotate(-48deg); }
+
+    .scene-5 .actor,
+    .scene-5 .note,
+    .scene-5 .between,
+    .scene-5 .divider { opacity: 0; pointer-events: none; }
+
+    /* กล่องของขวัญ */
+    .gift-zone {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .gift-button {
+      position: relative;
+      width: 230px;
+      height: 250px;
+      padding: 0;
+      border: 0;
+      border-radius: 22px;
+      background: transparent;
+      color: var(--rose);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .gift-glow {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff9c9, #ffe7b800 70%);
+      opacity: .4;
+      transition: transform 1.2s, opacity 1.2s;
+    }
+
+    .gift {
+      position: absolute;
+      top: 47px;
+      left: 35px;
+      width: 160px;
+      height: 140px;
+      transform-origin: 50% 100%;
+      animation: shake 3.2s ease-in-out infinite;
+    }
+
+    .box {
+      position: absolute;
+      left: 10px;
+      bottom: 0;
+      width: 140px;
+      height: 110px;
+      overflow: hidden;
+      border-radius: 5px 5px 12px 12px;
+      background: linear-gradient(110deg, #d993a1, #c77c8d);
+      box-shadow: 0 14px 20px #8d536624;
+    }
+
+    .box::after,
+    .lid::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(50% - 11px);
+      width: 22px;
+      background: #974d63;
+    }
+
+    .lid {
+      position: absolute;
+      z-index: 3;
+      top: 16px;
+      left: 0;
+      width: 160px;
+      height: 29px;
+      border-radius: 6px;
+      background: #e5a8b4;
+      box-shadow: 0 4px 0 #a666791c;
+      transition:
+        transform 1.1s cubic-bezier(.2,.7,.2,1),
+        opacity .9s ease;
+    }
+
+    .bow {
+      position: absolute;
+      bottom: 27px;
+      left: 42px;
+      width: 76px;
+      height: 34px;
+    }
+
+    .bow::before,
+    .bow::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 39px;
+      height: 28px;
+      border: 6px solid #974d63;
+    }
+
+    .bow::before {
+      left: 0;
+      border-radius: 22px 22px 4px 22px;
+      transform: rotate(12deg);
+    }
+
+    .bow::after {
+      right: 0;
+      border-radius: 22px 22px 22px 4px;
+      transform: rotate(-12deg);
+    }
+
+    .gift-hint {
+      position: absolute;
+      bottom: 9px;
+      left: 0;
+      right: 0;
+      font-size: 15px;
+      transition: opacity .3s;
+    }
+
+    .is-opening .gift { animation: none; }
+    .is-opening .lid {
+      transform: translate(-12px, -94px) rotate(-14deg);
+      opacity: 0;
+    }
+    .is-opening .gift-glow { opacity: 1; transform: scale(1.6); }
+    .is-opening .gift-hint { opacity: 0; }
+
+    .particles {
+      position: absolute;
+      z-index: 6;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 12px;
+      border-radius: 2px;
+      background: #d994a4;
+      animation: scatter 1.35s ease-out forwards;
+    }
+
+    .particle:nth-child(2n) { background: #e4c17f; }
+    .particle:nth-child(3n) { background: #fffdf7; }
+
+    /* ข้อความและปุ่มควบคุม */
+    .caption {
+      display: grid;
+      place-items: center;
+      min-height: 125px;
+      margin: 14px 0 8px;
+      font-size: clamp(18px, 4.5vw, 22px);
+      line-height: 1.9;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: #fffaf6;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background .2s, transform .2s;
+    }
+
+    .btn:hover { background: #f3e7df; }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      border-color: var(--rose);
+      background: var(--rose);
+      color: white;
+    }
+
+    .btn-primary:hover { background: #934b5d; }
+    .btn-quiet { border-color: transparent; color: var(--muted); }
+
+    /* หน้าจดหมาย */
+    .finale {
+      padding: 14px 6px 8px;
+      text-align: center;
+      animation: arrive .8s ease both;
+    }
+
+    .heart-mark {
+      margin: 0 0 5px;
+      color: var(--rose);
+      font-size: 46px;
+      line-height: 1.3;
+    }
+
+    .finale h1 {
+      margin: 8px 0;
+      font-size: clamp(26px, 6vw, 36px);
+      font-weight: 650;
+    }
+
+    .recipient { margin: 0; color: var(--rose); }
+    .subtitle { margin: 12px 0 25px; color: var(--muted); }
+
+    .letter {
+      margin: 0 0 26px;
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fffdf9;
+      text-align: left;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+      line-height: 2;
+      font-size: 15px;
+    }
+
+    .paused .stage * { animation-play-state: paused !important; }
+
+    /* หน้าต่างแก้ไขข้อความ */
+    .text-editor {
+      width: min(94vw, 660px);
+      max-height: 86vh;
+      max-height: 86svh;
+      overflow-y: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      color: var(--ink);
+      background: #fffaf6;
+      box-shadow: 0 25px 100px #513e3b35;
+    }
+
+    .text-editor::backdrop {
+      background: #38292c70;
+    }
+
+    .editor-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .editor-heading h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .editor-description {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .editor-section {
+      margin: 24px 0;
+    }
+
+    .editor-section h3 {
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+
+    .editor-field {
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .editor-field > span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .editor-field input,
+    .editor-field textarea {
+      display: block;
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d9c7be;
+      border-radius: 10px;
+      color: var(--ink);
+      background: white;
+      font: inherit;
+      line-height: 1.6;
+    }
+
+    .editor-field textarea { resize: vertical; }
+
+    .editor-field input:focus-visible,
+    .editor-field textarea:focus-visible {
+      outline: 2px solid var(--rose);
+      outline-offset: 2px;
+    }
+
+    .scene-editor {
+      min-width: 0;
+      margin: 0 0 18px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .scene-editor legend {
+      padding: 0 8px;
+      font-weight: 600;
+    }
+
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .editor-status {
+      min-height: 24px;
+      color: var(--rose);
+      font-size: 13px;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes shake {
+      0%, 65%, 100% { transform: rotate(0); }
+      70% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+      80% { transform: rotate(-4deg); }
+      85% { transform: rotate(3deg); }
+      90% { transform: rotate(0); }
+    }
+
+    @keyframes scatter {
+      0% { opacity: 0; transform: translate(0, 25px) scale(.3); }
+      20% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) rotate(var(--r));
+      }
+    }
+
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 15px 12px; }
+      .card { padding: 17px; border-radius: 23px; }
+      .tag { font-size: 11px; }
+      .note { padding: 6px 8px; font-size: 11px; }
+      .letter { padding: 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      .particles { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app" id="app">
+    <header class="topbar">
+      <p class="brand">เรื่องราวของเรา</p>
+      <div>
+        <span class="tag">ตั้งใจทำไว้ให้เธอ</span>
+        
+      </div>
+    </header>
+
+    <div class="card">
+      <section id="story" aria-label="เรื่องราวก่อนเปิดของขวัญ">
+        <div class="progress" id="progress" aria-hidden="true"></div>
+
+        <div class="stage scene-1" id="stage">
+          <div class="sun" aria-hidden="true"></div>
+          <div class="divider" aria-hidden="true"></div>
+          <div class="floor" aria-hidden="true"></div>
+
+          <div class="note" id="noteA" aria-hidden="true">วันที่ยิ้มได้</div>
+          <div class="note note-b" id="noteB" aria-hidden="true">วันที่เหนื่อยบ้าง</div>
+          <div class="between" id="between" aria-hidden="true"></div>
+
+          <div class="actor actor-a" aria-hidden="true">
+            <div class="figure">
+              <div class="face">
+                <i class="eye left"></i>
+                <i class="eye right"></i>
+                <i class="mouth"></i>
+              </div>
+              <div class="hair"></div>
+              <div class="torso"></div>
+              <div class="legs"><i></i><i></i></div>
+            </div>
+            <div class="name" id="nameA">บิ๊ก</div>
+          </div>
+
+          <div class="actor actor-b" aria-hidden="true">
+            <div class="figure">
+              <div class="face">
+                <i class="eye left"></i>
+                <i class="eye right"></i>
+                <i class="mouth"></i>
+              </div>
+              <div class="hair"></div>
+              <div class="torso"></div>
+              <div class="legs"><i></i><i></i></div>
+            </div>
+            <div class="name" id="nameB">ปังปอนด์</div>
+          </div>
+
+          <div class="gift-zone" id="giftZone" hidden="">
+            <button class="gift-button" id="giftButton" type="button" aria-label="เปิดของขวัญวันเกิด">
+              <span class="gift-glow" aria-hidden="true"></span>
+              <span class="gift" aria-hidden="true">
+                <span class="box"></span>
+                <span class="lid"><span class="bow"></span></span>
+              </span>
+              <span class="gift-hint">ลองเปิดดูสิ</span>
+            </button>
+          </div>
+
+          <div class="particles" id="particles" aria-hidden="true"></div>
+        </div>
+
+        <p class="caption" id="caption" aria-live="polite" aria-atomic="true" tabindex="-1">และเรื่องราวเหล่านั้นก็ค่อย ๆ หล่อหลอมให้แต่ละคนเป็นอย่างที่เป็น</p>
+
+        <div class="controls" id="controls">
+          <button class="btn" id="pauseButton" type="button" aria-pressed="true">เล่นต่อ</button>
+          <button class="btn btn-primary" id="nextButton" type="button">ฉากถัดไป</button>
+          <button class="btn btn-quiet" id="skipButton" type="button">ข้ามไปเปิดของขวัญ</button>
+        </div>
+      </section>
+
+      <section class="finale" id="finale" hidden="" aria-labelledby="birthdayTitle">
+        <p class="heart-mark" aria-hidden="true">♡</p>
+        <p class="recipient" id="recipient">ถึง คนพิเศษของเค้า</p>
+        <h1 id="birthdayTitle" tabindex="-1">สุขสันต์วันเกิดนะ</h1>
+        <p class="subtitle">นี่คือเรื่องราวของเรา</p>
+        <div class="letter" id="letter">เราอาจจะไม่ได้เหมือนกันทุกอย่าง
+แต่เค้าดีใจที่ได้รู้จักเธอ
+และได้มีเธออยู่ในวันธรรมดาของเค้า
+
+สุขสันต์วันเกิดนะ
+ขอให้ปีนี้เธอได้ทำสิ่งที่ชอบ
+ได้พักในวันที่เหนื่อย
+และมีเรื่องให้ยิ้มได้บ่อย ๆ
+
+ขอบคุณที่มาเป็นส่วนหนึ่งในชีวิตเค้า
+ยังมีอีกหลายเรื่องที่เค้าอยากทำด้วยกันกับเธอ
+รักเธอนะครับ</div>
+        <button class="btn" id="replayButton" type="button">ย้อนดูเรื่องของเราอีกครั้ง</button>
+      </section>
+    </div>
+  </main>
+
+  
+
+  <script id="gift-content" type="application/json">{"config":{"pageTitle":"เรื่องราวของเรา","personA":"บิ๊ก","personB":"ปังปอนด์","recipient":"คนพิเศษของเค้า","birthdayHeading":"สุขสันต์วันเกิดนะ","birthdaySubtitle":"นี่คือเรื่องราวของเรา","letter":"เราอาจจะไม่ได้เหมือนกันทุกอย่าง\nแต่เค้าดีใจที่ได้รู้จักเธอ\nและได้มีเธออยู่ในวันธรรมดาของเค้า\n\nสุขสันต์วันเกิดนะ\nขอให้ปีนี้เธอได้ทำสิ่งที่ชอบ\nได้พักในวันที่เหนื่อย\nและมีเรื่องให้ยิ้มได้บ่อย ๆ\n\nขอบคุณที่มาเป็นส่วนหนึ่งในชีวิตเค้า\nยังมีอีกหลายเรื่องที่เค้าอยากทำด้วยกันกับเธอ\nรักเธอนะครับ"},"scenes":[{"text":"คนสองคนต่างมีเรื่องราวที่ผ่านเข้ามาในชีวิต","noteA":"วันของเค้า","noteB":"วันของเธอ","middle":""},{"text":"และเรื่องราวเหล่านั้นก็ค่อย ๆ หล่อหลอมให้แต่ละคนเป็นอย่างที่เป็น","noteA":"วันที่ยิ้มได้","noteB":"วันที่เหนื่อยบ้าง","middle":""},{"text":"จนวันหนึ่ง พวกเขาได้มาพบกัน","noteA":"จับมือกัน","noteB":"เดินทางร่วมกัน","middle":"♡"},{"text":"ทั้งที่นิสัยต่างกัน และมองบางเรื่องไม่เหมือนกัน","noteA":"นิสัยคนละแบบ","noteB":"มองต่างมุม","middle":"≠"},{"text":"แล้วเมื่อคนสองคนนี้ได้ลองใช้ชีวิตด้วยกัน…","noteA":"วันธรรมดา","noteB":"ที่ได้อยู่ด้วยกัน","middle":"♡"},{"text":"เรื่องราวของพวกเขาจะเป็นอย่างไร?","noteA":"","noteB":"","middle":""}]}</script>
+
+  <script>
+    const CONFIG = {
+      personA: "บิ๊ก",
+      personB: "ปังปอนด์",
+      recipient: "คนพิเศษของเค้า",
+      letter: `เราอาจจะไม่ได้เหมือนกันทุกอย่าง
+แต่เค้าดีใจที่ได้รู้จักเธอ
+และได้มีเธออยู่ในวันธรรมดาของเค้า
+
+สุขสันต์วันเกิดนะ
+ขอให้ปีนี้เธอได้ทำสิ่งที่ชอบ
+ได้พักในวันที่เหนื่อย
+และมีเรื่องให้ยิ้มได้บ่อย ๆ
+
+ขอบคุณที่มาเป็นส่วนหนึ่งในชีวิตเค้า
+ยังมีอีกหลายเรื่องที่เค้าอยากทำด้วยกันกับเธอ
+รักเธอนะครับ`
+    };
+
+    const SCENES = [
+      {
+        text: "คนสองคนต่างมีเรื่องราวที่ผ่านเข้ามาในชีวิต",
+        noteA: "วันของเค้า",
+        noteB: "วันของเธอ",
+        middle: "",
+        duration: 5000
+      },
+      {
+        text: "และเรื่องราวเหล่านั้นก็ค่อย ๆ หล่อหลอมให้แต่ละคนเป็นอย่างที่เป็น",
+        noteA: "วันที่ยิ้มได้",
+        noteB: "วันที่เหนื่อยบ้าง",
+        middle: "",
+        duration: 7000
+      },
+      {
+        text: "จนวันหนึ่ง พวกเขาได้มาพบกัน",
+        noteA: "จับมือกัน",
+        noteB: "เดินทางร่วมกัน",
+        middle: "♡",
+        duration: 4500
+      },
+      {
+        text: "ทั้งที่นิสัยต่างกัน และมองบางเรื่องไม่เหมือนกัน",
+        noteA: "นิสัยคนละแบบ",
+        noteB: "มองต่างมุม",
+        middle: "≠",
+        duration: 6000
+      },
+      {
+        text: "แล้วเมื่อคนสองคนนี้ได้ลองใช้ชีวิตด้วยกัน…",
+        noteA: "วันธรรมดา",
+        noteB: "ที่ได้อยู่ด้วยกัน",
+        middle: "♡",
+        duration: 6000
+      },
+      {
+        text: "เรื่องราวของพวกเขาจะเป็นอย่างไร?",
+        noteA: "",
+        noteB: "",
+        middle: "",
+        duration: 0
+      }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    const app = $("app");
+    const story = $("story");
+    const stage = $("stage");
+    const caption = $("caption");
+    const controls = $("controls");
+    const giftZone = $("giftZone");
+    const giftButton = $("giftButton");
+    const pauseButton = $("pauseButton");
+    const finale = $("finale");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const lastScene = SCENES.length - 1;
+
+    let sceneIndex = 0;
+    let timer = null;
+    let openingTimer = null;
+    let deadline = 0;
+    let remaining = 0;
+    let paused = false;
+    let opening = false;
+
+    $("nameA").textContent = CONFIG.personA;
+    $("nameB").textContent = CONFIG.personB;
+    $("recipient").textContent = `ถึง ${CONFIG.recipient}`;
+    $("letter").textContent = CONFIG.letter;
+
+    const progressDots = SCENES.map(() => {
+      const dot = document.createElement("span");
+      $("progress").appendChild(dot);
+      return dot;
+    });
+
+    function updatePauseButton() {
+      pauseButton.textContent = paused ? "เล่นต่อ" : "พักไว้ก่อน";
+      pauseButton.setAttribute("aria-pressed", String(paused));
+      app.classList.toggle("paused", paused);
+    }
+
+    function scheduleNextScene() {
+      clearTimeout(timer);
+      deadline = performance.now() + remaining;
+      timer = setTimeout(() => {
+        showScene(sceneIndex + 1);
+      }, remaining);
+    }
+
+    function showScene(index) {
+      clearTimeout(timer);
+      sceneIndex = Math.min(index, lastScene);
+
+      const scene = SCENES[sceneIndex];
+      const isGiftScene = sceneIndex === lastScene;
+      const controlHadFocus = controls.contains(document.activeElement);
+
+      stage.className = `stage scene-${sceneIndex}`;
+      caption.textContent = scene.text;
+      $("noteA").textContent = scene.noteA;
+      $("noteB").textContent = scene.noteB;
+      $("between").textContent = scene.middle;
+
+      giftZone.hidden = !isGiftScene;
+      controls.hidden = isGiftScene;
+
+      progressDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i <= sceneIndex);
+      });
+
+      remaining = scene.duration;
+
+      if (isGiftScene) {
+        paused = false;
+        updatePauseButton();
+        if (controlHadFocus) {
+          giftButton.focus({ preventScroll: true });
+        }
+      } else if (!paused) {
+        scheduleNextScene();
+      }
+    }
+
+    function setPaused(value) {
+      if (sceneIndex === lastScene || opening) return;
+
+      if (value && !paused) {
+        remaining = Math.max(0, deadline - performance.now());
+        clearTimeout(timer);
+      }
+
+      const wasPaused = paused;
+      paused = value;
+      updatePauseButton();
+
+      if (!paused && wasPaused) {
+        scheduleNextScene();
+      }
+    }
+
+    function createParticles() {
+      $("particles").replaceChildren();
+      if (reducedMotion.matches) return;
+
+      for (let i = 0; i < 16; i++) {
+        const particle = document.createElement("span");
+        particle.className = "particle";
+        particle.style.setProperty("--x", `${(i - 7.5) * 20}px`);
+        particle.style.setProperty("--y", `${-65 - Math.random() * 105}px`);
+        particle.style.setProperty("--r", `${Math.random() * 260 - 130}deg`);
+        $("particles").appendChild(particle);
+      }
+    }
+
+    pauseButton.addEventListener("click", () => setPaused(!paused));
+    $("nextButton").addEventListener("click", () => showScene(sceneIndex + 1));
+    $("skipButton").addEventListener("click", () => {
+      showScene(lastScene);
+      giftButton.focus({ preventScroll: true });
+    });
+
+    giftButton.addEventListener("click", () => {
+      if (opening) return;
+      opening = true;
+      giftButton.disabled = true;
+      stage.classList.add("is-opening");
+      caption.textContent = "ของขวัญชิ้นนี้ เราตั้งใจทำให้เธอ";
+      createParticles();
+
+      openingTimer = setTimeout(() => {
+        story.hidden = true;
+        finale.hidden = false;
+        $("birthdayTitle").focus({ preventScroll: true });
+      }, reducedMotion.matches ? 200 : 1500);
+    });
+
+    $("replayButton").addEventListener("click", () => {
+      clearTimeout(timer);
+      clearTimeout(openingTimer);
+      opening = false;
+      paused = false;
+      giftButton.disabled = false;
+      $("particles").replaceChildren();
+
+      finale.hidden = true;
+      story.hidden = false;
+      updatePauseButton();
+      showScene(0);
+      caption.focus({ preventScroll: true });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && !paused && !story.hidden) {
+        setPaused(true);
+      }
+    });
+
+    (() => {
+      const STORAGE_KEY = "birthday-gift-content-v1";
+      const isGiftCopy = document.documentElement.dataset.giftMode === "view";
+
+      CONFIG.pageTitle = document.querySelector(".brand").textContent.trim();
+      CONFIG.birthdayHeading = $("birthdayTitle").textContent.trim();
+      CONFIG.birthdaySubtitle = document.querySelector(".subtitle").textContent.trim();
+
+      const editableConfigKeys = ["pageTitle", "personA", "personB", "recipient", "birthdayHeading", "birthdaySubtitle", "letter"];
+      const editableSceneKeys = ["text", "noteA", "noteB", "middle"];
+
+      function getContent() {
+        const config = {};
+        editableConfigKeys.forEach((key) => { config[key] = CONFIG[key]; });
+        return {
+          config,
+          scenes: SCENES.map((scene) => {
+            const result = {};
+            editableSceneKeys.forEach((key) => { result[key] = scene[key]; });
+            return result;
+          })
+        };
+      }
+
+      function applyContent(data) {
+        if (!data || typeof data !== "object") return;
+        editableConfigKeys.forEach((key) => {
+          if (typeof data.config?.[key] === "string") CONFIG[key] = data.config[key];
+        });
+        if (!Array.isArray(data.scenes)) return;
+        SCENES.forEach((scene, index) => {
+          const savedScene = data.scenes[index];
+          editableSceneKeys.forEach((key) => {
+            if (typeof savedScene?.[key] === "string") scene[key] = savedScene[key];
+          });
+        });
+      }
+
+      function refreshText() {
+        document.title = CONFIG.pageTitle;
+        document.querySelector(".brand").textContent = CONFIG.pageTitle;
+        $("nameA").textContent = CONFIG.personA;
+        $("nameB").textContent = CONFIG.personB;
+        $("recipient").textContent = CONFIG.recipient ? `ถึง ${CONFIG.recipient}` : "";
+        $("birthdayTitle").textContent = CONFIG.birthdayHeading;
+        document.querySelector(".subtitle").textContent = CONFIG.birthdaySubtitle;
+        $("letter").textContent = CONFIG.letter;
+
+        if (!story.hidden && !opening) {
+          const currentScene = SCENES[sceneIndex];
+          caption.textContent = currentScene.text;
+          $("noteA").textContent = currentScene.noteA;
+          $("noteB").textContent = currentScene.noteB;
+          $("between").textContent = currentScene.middle;
+        }
+      }
+
+      try {
+        const embeddedContent = JSON.parse($("gift-content").textContent || "{}");
+        applyContent(embeddedContent);
+      } catch {}
+
+      if (!isGiftCopy) {
+        try {
+          const savedContent = localStorage.getItem(STORAGE_KEY);
+          if (savedContent) applyContent(JSON.parse(savedContent));
+        } catch {}
+      }
+
+      story.hidden = false;
+      finale.hidden = true;
+      giftButton.disabled = false;
+      $("particles").replaceChildren();
+
+      updatePauseButton();
+      refreshText();
+
+      if (isGiftCopy) {
+        $("editButton")?.remove();
+        $("textEditor")?.remove();
+        return;
+      }
+
+      const editor = $("textEditor");
+      const editorForm = $("editorForm");
+      const status = $("editorStatus");
+      let resumeAfterEditing = false;
+
+      function createField(labelText, id, value, rows = 1) {
+        const label = document.createElement("label");
+        label.className = "editor-field";
+        label.htmlFor = id;
+
+        const title = document.createElement("span");
+        title.textContent = labelText;
+
+        const input = document.createElement(rows > 1 ? "textarea" : "input");
+        input.id = id;
+        input.value = value ?? "";
+        if (rows > 1) input.rows = rows;
+        else input.type = "text";
+
+        label.append(title, input);
+        return label;
+      }
+
+      function buildEditor() {
+        const mainFields = $("mainTextFields");
+        const sceneFields = $("sceneTextFields");
+        const letterField = $("letterTextField");
+
+        mainFields.replaceChildren();
+        sceneFields.replaceChildren();
+        letterField.replaceChildren();
+
+        const configFields = [
+          ["pageTitle", "หัวเรื่องของเว็บ"],
+          ["personA", "ชื่อใต้ตัวละครฝั่งซ้าย"],
+          ["personB", "ชื่อใต้ตัวละครฝั่งขวา"],
+          ["recipient", "ชื่อหรือคำเรียกคนรับของขวัญ"],
+          ["birthdayHeading", "หัวข้อหลังเปิดของขวัญ"],
+          ["birthdaySubtitle", "ข้อความใต้หัวข้อ"]
+        ];
+
+        configFields.forEach(([key, label]) => {
+          mainFields.appendChild(createField(label, `edit-${key}`, CONFIG[key]));
+        });
+
+        SCENES.forEach((scene, index) => {
+          const fieldset = document.createElement("fieldset");
+          fieldset.className = "scene-editor";
+
+          const legend = document.createElement("legend");
+          legend.textContent = index === 2 ? "ฉากที่ 3 — พบกันและจับมือ" : `ฉากที่ ${index + 1}`;
+          fieldset.appendChild(legend);
+
+          fieldset.appendChild(createField("ข้อความบรรยาย", `edit-scene-${index}-text`, scene.text, 3));
+
+          if (index < lastScene) {
+            fieldset.appendChild(createField("ข้อความเหนือตัวละครฝั่งซ้าย", `edit-scene-${index}-noteA`, scene.noteA));
+            fieldset.appendChild(createField("ข้อความเหนือตัวละครฝั่งขวา", `edit-scene-${index}-noteB`, scene.noteB));
+          }
+
+          sceneFields.appendChild(fieldset);
+        });
+
+        letterField.appendChild(createField("เขียนถึงเขาด้วยคำของคุณเอง", "edit-letter", CONFIG.letter, 9));
+      }
+
+      function saveEditorContent() {
+        editableConfigKeys.forEach((key) => {
+          const field = $(`edit-${key}`);
+          if (field) CONFIG[key] = field.value;
+        });
+
+        SCENES.forEach((scene, index) => {
+          ["text", "noteA", "noteB"].forEach((key) => {
+            const field = $(`edit-scene-${index}-${key}`);
+            if (field) scene[key] = field.value;
+          });
+        });
+
+        refreshText();
+
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(getContent()));
+          status.textContent = "บันทึกแล้วในเบราว์เซอร์เครื่องนี้ ปิดหน้าต่างเพื่อดูผลได้เลย";
+        } catch {
+          status.textContent = "แก้ไขแล้ว แต่เบราว์เซอร์นี้บันทึกถาวรไม่ได้ กรุณาดาวน์โหลดฉบับส่งให้แฟน";
+        }
+      }
+
+      $("editButton").addEventListener("click", () => {
+        if (opening && !story.hidden) return;
+        resumeAfterEditing = !story.hidden && sceneIndex < lastScene && !paused;
+        if (resumeAfterEditing) setPaused(true);
+
+        buildEditor();
+        status.textContent = "";
+        editor.showModal();
+      });
+
+      $("closeEditorButton").addEventListener("click", () => editor.close());
+
+      editor.addEventListener("close", () => {
+        if (resumeAfterEditing && !document.hidden) setPaused(false);
+        resumeAfterEditing = false;
+      });
+
+      editorForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        saveEditorContent();
+      });
+
+      $("downloadGiftButton").addEventListener("click", () => {
+        saveEditorContent();
+        const copy = document.documentElement.cloneNode(true);
+        copy.dataset.giftMode = "view";
+
+        copy.querySelector("#gift-content").textContent = JSON.stringify(getContent()).replace(/</g, "\\u003c");
+        copy.querySelector("#textEditor")?.remove();
+        copy.querySelector("#editButton")?.remove();
+        copy.querySelector("#progress").replaceChildren();
+        copy.querySelector("#particles").replaceChildren();
+
+        copy.querySelector("#story").hidden = false;
+        copy.querySelector("#finale").hidden = true;
+        copy.querySelector("#giftButton").disabled = false;
+        copy.querySelector("#app").classList.remove("paused");
+
+        const html = "<!DOCTYPE html>\n" + copy.outerHTML;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "birthday-gift.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        status.textContent = "สร้างฉบับส่งให้แฟนแล้ว ไฟล์นี้มีข้อความที่แก้ล่าสุดและไม่มีปุ่มแก้ไขครับ";
+      });
+    })();
+
+    showScene(0);
+  </script>
+
+</body></html>
